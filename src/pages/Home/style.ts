@@ -1,4 +1,4 @@
-import {Field, Form } from 'formik'
+import {Field, Form} from 'formik'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -7,8 +7,9 @@ export const LogoContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 24%;
+    height: 25%;
     margin: auto;
+    padding: 50px 0 20px 0; 
 `
 
 export const FormContainer = styled(Form)`
@@ -31,50 +32,68 @@ export const FormContainer = styled(Form)`
 `
 
 export const InputContainer = styled.fieldset`
-    margin: -1% auto;
+    margin: 0 auto;
     border: 0;
     width: 70%;
-    height: 70%;
+    height: 20%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
 
     label{
-        font-size: 24px;
+        font-size: 18px;
+        font-weight: bold;
         text-align: start;
     }
 `
 
 export const Input = styled(Field)`
     width: 100%;
-    height: 40%;
-    padding: 1.5%;
+    height: 5%;
+    padding: 24px;
     border: 0;
     background-color: #B793FF;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 16px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `
 export const ForgotContainer = styled.div`
     width: 70%;
     height: 5%;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: flex-start;
 `
 
+export const ForgotLink = styled.a`
+    text-decoration: underline;
+    &:hover{
+        color: #441276;
+        transition: 1s;
+    }
+`
+
 export const LoginButton = styled.button`
     cursor: pointer;
     width: 40%;
-    padding: 3%;
+    padding: 1.5%;
+    margin: 1%;
     background-color: #F46036;
+    font-weight: bold;
+    color: #FFD9CD;
     border-radius: 10px;
     border: 0;
     font-size: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    &:hover{
+        background-color: #441276;
+        transition: 1s;
+    }
 `
+
+
 export const ExternalLoginContainer = styled.div`
     width: 80%;
     height: 8%;
@@ -89,38 +108,49 @@ export const OathButton = styled.button`
     cursor: pointer;
     width: 25%;
     padding: 3%;
-    margin: 1% 1%;
+    margin: 0.5% 0.5%;
     background-color: #F46036;
     border-radius: 10px;
     border: 0;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-`
-
-export const InfoContainer = styled.div`
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    img{
-        width: 600px;
+    &:hover{
+        background-color: #441276;
+        transition: 1s;
     }
 `
 
 export const SignUpLabel = styled(Link)`
-    margin: 3%;
+    margin: 1.5%;
 
     text-decoration: underline;
 
     h2{
         min-width: 450px;
     }
+
+    &:hover{
+        color: #441276;
+        transition: 1s;
+    }
 `
 
 export const Error = styled.p`
     /* margin: 2%; */
+`
+
+export const InfoContainer = styled.div`
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h2{
+        padding: 5% 0;
+        margin: 0 auto;
+    }
+    img{
+        width: 600px;
+    }
 `
 
 export const MainContainer = styled.main`

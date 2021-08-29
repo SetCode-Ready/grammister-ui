@@ -1,5 +1,5 @@
 import React from 'react'
-import { ForgotContainer, Input, FormContainer, InputContainer, LoginButton, MainContainer, LogoContainer, ExternalLoginContainer, OathButton, InfoContainer, SignUpLabel, Error } from './style'
+import { ForgotContainer, Input, FormContainer, InputContainer, LoginButton, MainContainer, LogoContainer, ExternalLoginContainer, OathButton, InfoContainer, SignUpLabel, Error, ForgotLink } from './style'
 import {ReactComponent as Logo } from '../../assets/Logo.svg' 
 import GoogleLogo from '../../assets/google_logo.png' 
 import FaceBookLogo from '../../assets/Facebook Icon.png' 
@@ -15,7 +15,7 @@ interface FormInputs{
 export default function Home() {
 
     function GoogleLogIn(){
-        console.log('Login Com Goolge')
+        console.log('Login Com Google')
 
         
     }
@@ -78,7 +78,7 @@ export default function Home() {
                         </LogoContainer>
 
                         <InputContainer>
-                            <label>Email ou celular:</label>
+                            <label>EMAIL OU CELULAR:</label>
                             <Input type="email" name="email" />
                             {errors.email && (
                                 <Error>{errors.email}</Error>
@@ -86,7 +86,7 @@ export default function Home() {
                         </InputContainer>
                         
                         <InputContainer>
-                            <label>Senha:</label>
+                            <label>SENHA:</label>
                             <Input type="text" name="password" />
                             {errors.password && touched && (
                                 <Error>{errors.password}</Error>
@@ -94,7 +94,7 @@ export default function Home() {
                         </InputContainer>
 
                         <ForgotContainer>
-                            <p>Esqueceu sua senha?</p>
+                            <ForgotLink href="/">Esqueceu sua senha?</ForgotLink>
                         </ForgotContainer>
 
                         <LoginButton onClick={() => {setFieldValue('btn', 'main')}} >Entrar</LoginButton>
@@ -111,7 +111,7 @@ export default function Home() {
                             </OathButton>
                         </ExternalLoginContainer>
                         
-                        <SignUpLabel to="/login">É novo por aqui! saiba como se cadastrar </SignUpLabel>
+                        <SignUpLabel to="/">É novo por aqui! saiba como se cadastrar </SignUpLabel>
                     </FormContainer>
                 )}
                 
@@ -124,7 +124,7 @@ export default function Home() {
                 Momentos e Seus Amigos...
                 </h2>
 
-                <img src={AsideImage} alt="Image de um vinil saindo da caixa e um gramphone na capa do vinil"/>
+                <img src={AsideImage} alt="Image de um vinil saindo da caixa e um gramophone na capa do vinil"/>
             </InfoContainer>
         </MainContainer>
     )
