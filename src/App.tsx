@@ -1,10 +1,11 @@
 import React from 'react';
+import GlobalStyle from './style';
 
 function App() {
   return (
-    <div>
-      <h1>Grammister</h1>
-    </div>
+    <>
+      <GlobalStyle/>
+    </>
   );
 }
 
