@@ -6,11 +6,13 @@ import {
   Switch
 } from 'react-router-dom'
 import Home from './pages/Home';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <>
       <GlobalStyle/>
+      <Toaster/>
       <Router>
         <Switch>
 

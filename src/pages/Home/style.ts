@@ -1,3 +1,4 @@
+import {Field, Form } from 'formik'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -6,11 +7,11 @@ export const LogoContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 30%;
+    height: 24%;
     margin: auto;
 `
 
-export const Form = styled.form`
+export const FormContainer = styled(Form)`
     width: 40vw;
     height: 100%;
     background-color: #5E19A2;
@@ -19,19 +20,25 @@ export const Form = styled.form`
     flex-direction: column;
     align-items: center;
 
+    max-height: 700px;
+    min-height: 500px;
+
     min-width: 350px;
+
+    @media(max-width: 1100px){
+        margin-top: 5%;
+    }
 `
 
 export const InputContainer = styled.fieldset`
-    margin: -3% auto;
+    margin: -1% auto;
     border: 0;
     width: 70%;
-    height: 20%;
+    height: 70%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    
 
     label{
         font-size: 24px;
@@ -39,7 +46,7 @@ export const InputContainer = styled.fieldset`
     }
 `
 
-export const Input = styled.input`
+export const Input = styled(Field)`
     width: 100%;
     height: 40%;
     padding: 1.5%;
@@ -104,21 +111,21 @@ export const InfoContainer = styled.div`
 
 export const SignUpLabel = styled(Link)`
     margin: 3%;
-    transition: 3s;
 
-    &:hover{
-        text-decoration: underline;
-        transition: 3s;
-    }
+    text-decoration: underline;
 
     h2{
         min-width: 450px;
     }
-`  
+`
+
+export const Error = styled.p`
+    /* margin: 2%; */
+`
 
 export const MainContainer = styled.main`
     margin: 2% auto;
-    height: 90vh;
+    height: 91vh;
     width: 85vw;
     display: flex;
     flex-direction: row;
@@ -131,8 +138,8 @@ export const MainContainer = styled.main`
         flex-direction: column;
         align-items: center;
 
-        ${Form}{
-            margin-top: 5%;
+        ${FormContainer}{
+            min-height: 600px;
         }
 
         ${InfoContainer}{
