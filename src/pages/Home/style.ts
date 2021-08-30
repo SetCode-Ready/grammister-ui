@@ -69,9 +69,9 @@ export const ForgotContainer = styled.div`
 
 export const ForgotLink = styled.a`
     text-decoration: underline;
+    transition: 0.5s;
     &:hover{
         color: #441276;
-        transition: 1s;
     }
 `
 
@@ -87,9 +87,9 @@ export const LoginButton = styled.button`
     border: 0;
     font-size: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: 0.5s;
     &:hover{
         background-color: #441276;
-        transition: 1s;
     }
 `
 
@@ -113,15 +113,15 @@ export const OathButton = styled.button`
     border-radius: 10px;
     border: 0;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: 0.5s;
     &:hover{
         background-color: #441276;
-        transition: 1s;
     }
 `
 
 export const SignUpLabel = styled(Link)`
     margin: 1.5%;
-
+    transition: 0.5s;
     text-decoration: underline;
 
     h2{
@@ -130,7 +130,6 @@ export const SignUpLabel = styled(Link)`
 
     &:hover{
         color: #441276;
-        transition: 1s;
     }
 `
 

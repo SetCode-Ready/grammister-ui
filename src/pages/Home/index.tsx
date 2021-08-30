@@ -4,7 +4,7 @@ import {ReactComponent as Logo } from '../../assets/Logo.svg'
 import GoogleLogo from '../../assets/google_logo.png' 
 import FaceBookLogo from '../../assets/Facebook Icon.png' 
 import AsideImage from '../../assets/aside_image_home.png' 
-import { ErrorMessage, Formik, FormikErrors, FormikValues } from 'formik'
+import { Formik, FormikErrors, FormikValues } from 'formik'
 import toast from 'react-hot-toast'
 
 interface FormInputs{
@@ -111,7 +111,7 @@ export default function Home() {
                             </OathButton>
                         </ExternalLoginContainer>
                         
-                        <SignUpLabel to="/">É novo por aqui! saiba como se cadastrar </SignUpLabel>
+                        <SignUpLabel to="/login">É novo por aqui! saiba como se cadastrar </SignUpLabel>
                     </FormContainer>
                 )}
                 
@@ -124,7 +124,7 @@ export default function Home() {
                 Momentos e Seus Amigos...
                 </h2>
 
-                <img src={AsideImage} alt="Image de um vinil saindo da caixa e um gramophone na capa do vinil"/>
+                <img src={AsideImage} alt="Imagem de um vinil saindo da caixa e um gramophone na capa do vinil"/>
             </InfoContainer>
         </MainContainer>
     )
