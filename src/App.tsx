@@ -8,6 +8,7 @@ import {
 import Home from './pages/Home';
 import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
+import Error from './pages/Error';
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
 
           <Route path="/login" >
             <Login/>
+          </Route>
+
+          <Route path="*" >
+            <Error/>
           </Route>
 
         </Switch>
