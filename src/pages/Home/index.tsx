@@ -1,11 +1,13 @@
 import React from 'react'
-import { ForgotContainer, Input, FormContainer, InputContainer, LoginButton, MainContainer, LogoContainer, ExternalLoginContainer, OathButton, InfoContainer, SignUpLabel, Error, ForgotLink } from './style'
+import { ForgotContainer, FormContainer, MainContainer, LogoContainer, ExternalLoginContainer, OathButton, InfoContainer, SignUpLabel, ForgotLink } from './style'
 import {ReactComponent as Logo } from '../../assets/Logo.svg' 
 import GoogleLogo from '../../assets/google_logo.png' 
 import FaceBookLogo from '../../assets/Facebook Icon.png' 
 import AsideImage from '../../assets/aside_image_home.png' 
 import { Formik, FormikErrors, FormikValues } from 'formik'
 import toast from 'react-hot-toast'
+import InputComponent from '../../components/InputComponent'
+import {Button} from '../../components/Button/style'
 
 interface FormInputs{
     email: String;
@@ -16,8 +18,6 @@ export default function Home() {
 
     function GoogleLogIn(){
         console.log('Login Com Google')
-
-        
     }
 
     function FacebookLogIn(){
@@ -51,7 +51,7 @@ export default function Home() {
             <Formik
                 validate={validate}
                 initialValues={initialValues}
-                onSubmit={(values, actions) => {
+                onSubmit={(values) => {
                     switch(values.btn){
                         case 'main':
                             MainLogin(values);
@@ -77,27 +77,15 @@ export default function Home() {
                             <Logo width="150px" />
                         </LogoContainer>
 
-                        <InputContainer>
-                            <label>EMAIL OU CELULAR:</label>
-                            <Input type="email" name="email" />
-                            {errors.email && (
-                                <Error>{errors.email}</Error>
-                            )}
-                        </InputContainer>
+                        <InputComponent inputW="70" name="email" label="Email ou Celular:" erro={errors.email} />
                         
-                        <InputContainer>
-                            <label>SENHA:</label>
-                            <Input type="text" name="password" />
-                            {errors.password && touched && (
-                                <Error>{errors.password}</Error>
-                            )}
-                        </InputContainer>
+                        <InputComponent inputW="70" name="password" label="Senha:" erro={errors.password}/>
 
                         <ForgotContainer>
-                            <ForgotLink href="/">Esqueceu sua senha?</ForgotLink>
+                            <ForgotLink to="/">Esqueceu sua senha?</ForgotLink>
                         </ForgotContainer>
 
-                        <LoginButton onClick={() => {setFieldValue('btn', 'main')}} >Entrar</LoginButton>
+                        <Button onClick={() => {setFieldValue('btn', 'main')}} >Entrar</Button>
 
                         <label>ou entre com:</label>
                         

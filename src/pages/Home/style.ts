@@ -1,4 +1,4 @@
-import {Field, Form} from 'formik'
+import {Form} from 'formik'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -30,34 +30,6 @@ export const FormContainer = styled(Form)`
         margin-top: 5%;
     }
 `
-
-export const InputContainer = styled.fieldset`
-    margin: 0 auto;
-    border: 0;
-    width: 70%;
-    height: 20%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-
-    label{
-        font-size: 18px;
-        font-weight: bold;
-        text-align: start;
-    }
-`
-
-export const Input = styled(Field)`
-    width: 100%;
-    height: 5%;
-    padding: 24px;
-    border: 0;
-    background-color: #B793FF;
-    border-radius: 10px;
-    font-size: 16px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-`
 export const ForgotContainer = styled.div`
     width: 70%;
     height: 5%;
@@ -67,32 +39,13 @@ export const ForgotContainer = styled.div`
     justify-content: flex-start;
 `
 
-export const ForgotLink = styled.a`
+export const ForgotLink = styled(Link)`
     text-decoration: underline;
     transition: 0.5s;
     &:hover{
         color: #441276;
     }
 `
-
-export const LoginButton = styled.button`
-    cursor: pointer;
-    width: 40%;
-    padding: 1.5%;
-    margin: 1%;
-    background-color: #F46036;
-    font-weight: bold;
-    color: #FFD9CD;
-    border-radius: 10px;
-    border: 0;
-    font-size: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    transition: 0.5s;
-    &:hover{
-        background-color: #441276;
-    }
-`
-
 
 export const ExternalLoginContainer = styled.div`
     width: 80%;
@@ -131,10 +84,6 @@ export const SignUpLabel = styled(Link)`
     &:hover{
         color: #441276;
     }
-`
-
-export const Error = styled.p`
-    /* margin: 2%; */
 `
 
 export const InfoContainer = styled.div`
