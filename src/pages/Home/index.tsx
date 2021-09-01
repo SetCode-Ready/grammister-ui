@@ -77,7 +77,7 @@ export default function Home() {
                             <Logo width="150px" />
                         </LogoContainer>
 
-                        <InputComponent inputW="70" name="email" label="Email ou Celular:" erro={errors.email} />
+                        <InputComponent inputW="70" name="email" label="Email:" erro={errors.email} />
                         
                         <InputComponent inputW="70" name="password" label="Senha:" erro={errors.password}/>
 

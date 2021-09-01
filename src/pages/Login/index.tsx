@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 interface InputProps{
   name: string
-  email_phone: string
+  email: string
   password: string
   confirmPassword: string
   birth: string
@@ -15,7 +15,7 @@ interface InputProps{
 
 export default function Login() {
     
-    const initialValues = {name: "", email_phone: "", password: "", confirmPassword: "", birth: "", genre: ""}
+    const initialValues = {name: "", email: "", password: "", confirmPassword: "", birth: "", genre: ""}
     
     function validate(values: InputProps){
       let errors: FormikErrors<FormikValues> = {}
@@ -23,8 +23,8 @@ export default function Login() {
       if(!values.birth){
         errors.email = "Digite sua data de nascimento!"
       }
-      if(!values.email_phone){
-        errors.email_phone = "Digite seu email ou telefone!"
+      if(!values.email){
+        errors.email = "Digite seu email ou telefone!"
       }
       if(!values.password){
         errors.password = "Digite sua senha!"
@@ -58,7 +58,7 @@ export default function Login() {
               if(!values.confirmPassword){
                 toast.error("Confirme sua senha!")
               }
-              if(!values.email_phone){
+              if(!values.email){
                 toast.error("Digite seu email ou telefone!")
               }
               if(!values.name){
@@ -75,8 +75,8 @@ export default function Login() {
               </InputContainer>
               
               <InputContainer inputW="90">
-                  <label>Email ou celular:</label>
-                  <Input  name="email_phone"/>
+                  <label>Email:</label>
+                  <Input  name="email"/>
               </InputContainer>
 
               <DualInputContainer>
