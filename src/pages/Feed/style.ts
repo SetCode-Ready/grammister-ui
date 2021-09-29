@@ -101,8 +101,6 @@ export const HighlightMusicContainer = styled.div`
                 }
             }
         }
-
-        
     }
 `
 
@@ -197,7 +195,7 @@ export const PostContentContainer = styled.div`
     border-radius: 1rem;
     position: relative;
     margin-bottom: 1.5rem;
-    
+    cursor: pointer;
 `
 
 export const UserInfo = styled.div`
