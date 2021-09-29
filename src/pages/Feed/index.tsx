@@ -231,7 +231,7 @@ export default function Feed() {
                         <UserInfo>
                             <PostImg src={Perfil} alt="foto do usuário" />
                             <div>
-                                <StyledP size={18} color="white" bold={600}>{post.name}</StyledP>
+                                <StyledP size={18} color="#f2f2f2" bold={600}>{post.name}</StyledP>
                                 <StyledP size={10} color="#B793FF" bold={600}> <Clock/> em {post.time} pm</StyledP>
                                 <StyledP size={14} color="#B793FF" bold={600}>alterou sua música do momento</StyledP>
                             </div>
@@ -254,7 +254,6 @@ export default function Feed() {
                             <img src={New_Repost} alt="Icone do chat" />
                             <img src={Comment} alt="Icone do grafico" />
                             <img src={Share} alt="Icone das notificações" />
-                            <img src={Album} alt="Icone das notificações" />
                         </IconsContainer>
 
                         <DetailContainer>
@@ -272,7 +271,7 @@ export default function Feed() {
                             style={{width: '500px'}}
                         />
 
-                        <HomeLink to="/feed" style={{color: 'white'}} >Que tal ver algumas sugestões &#128540;</HomeLink>
+                        <HomeLink to="/feed" style={{color: '#f2f2f2'}} >Que tal ver algumas sugestões &#128540;</HomeLink>
                     </AnimationContainer>
                 }
             </CenterContainer>
@@ -304,7 +303,7 @@ export default function Feed() {
                                 style={{width: '150px'}}
                             />
 
-                            <HomeLink to="/feed" style={{color: 'white'}} >Siga alguns artista para exibir suas noticias</HomeLink>
+                            <HomeLink to="/feed" style={{color: '#f2f2f2'}} >Siga alguns artista para exibir suas noticias</HomeLink>
                         </>
                     }
                 </ContentNewsContainer>

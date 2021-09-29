@@ -66,8 +66,6 @@ export const MomentMusicContainer = styled.div`
     }
 `
 
-
-
 export const HighlightMusicContainer = styled.div`
     width: 100%;
     padding: 0 4%;
@@ -183,12 +181,7 @@ export const CenterContainer = styled.div`
     transition: 0.3s;
 
     ::-webkit-scrollbar{
-        background-color: transparent;
-        width: 0.7rem;
-    }
-    ::-webkit-scrollbar-thumb{
-        background: #441276;
-        border-radius: 1rem;
+        display: none;
     }
 `
 
@@ -278,15 +271,14 @@ export const DetailContainer = styled.div`
     }
 `
 
-
-
 export const Title = styled.h2`
     size: 20px;
-    color: white;
+    color: #f2f2f2;
 `
 
 export const ContentNewsContainer = styled.div`
     width: 96%;
+    margin: 0 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -310,7 +302,7 @@ export const NewsContainer = styled.div`
 
     p{
         width: 100%;
-        color: white;
+        color: #f2f2f2;
         line-height: 1.25rem;
     }
 
@@ -327,7 +319,7 @@ export const NewsContainer = styled.div`
         position: absolute;
         bottom: 0.25rem;
         right: 0.5rem;
-        color: white;
+        color: #f2f2f2;
     }
 
 `
@@ -336,13 +328,14 @@ interface ExpandNewsContainerProps{
 }
 
 export const ExpandNewsContainer = styled.div<ExpandNewsContainerProps>`
-    width: 4%;
-    height: ${(props) => props.height + 'px' || 'auto'};
-    background-color: white;
+    width: 0.75rem;
+    height: 37rem;
+    background-color: #f2f2f2;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: fixed;
 
     svg{
         transform: rotate(90deg);
@@ -368,7 +361,7 @@ export const ReturnToFeed = styled.div`
         align-self: center;
         width: 100%;
         text-align: center;
-        color: white;
+        color: #f2f2f2;
     }
 `
 
@@ -377,22 +370,18 @@ export const RightContainer = styled.div`
     border-radius: 1rem;
     display: flex;
     overflow-x: auto;
+    color: #000;
 
     ::-webkit-scrollbar{
-        background-color: transparent;
-        width: 0.7rem;
+        display: none;
     }
-    ::-webkit-scrollbar-thumb{
-        background: #441276;
-        border-radius: 1rem;
-    }
+
     &.expanded{
         justify-content: center;
 
         ${NewsContainer}{
             height: 25rem;
             width: 98%;
-            /* padding: 1rem; */
             justify-content: space-around;
 
             img{
