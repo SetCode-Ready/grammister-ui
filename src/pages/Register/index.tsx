@@ -13,7 +13,7 @@ interface InputProps{
   genre: string
 }
 
-export default function Login() {
+export default function Register() {
     
     const initialValues = {name: "", email: "", password: "", confirmPassword: "", birth: "", genre: ""}
     
