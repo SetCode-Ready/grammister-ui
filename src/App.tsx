@@ -24,7 +24,7 @@ function App() {
             <Home/>
           </Route>
 
-          <Route path="/login" >
+          <Route path="/register" >
             <Login/>
           </Route>
 
