@@ -99,7 +99,7 @@ export default function Home() {
                             </OathButton>
                         </ExternalLoginContainer>
                         
-                        <SignUpLabel to="/login">É novo por aqui! saiba como se cadastrar </SignUpLabel>
+                        <SignUpLabel to="/register">É novo por aqui! saiba como se cadastrar </SignUpLabel>
                     </FormContainer>
                 )}
                 

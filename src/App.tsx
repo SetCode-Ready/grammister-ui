@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 import Home from './pages/Home';
 import { Toaster } from 'react-hot-toast';
-import Login from './pages/Login';
+import Register from './pages/Register';
 import Error from './pages/Error';
 import Feed from './pages/Feed';
 import PostDetails from './pages/PostDetails';
@@ -24,8 +24,8 @@ function App() {
             <Home/>
           </Route>
 
-          <Route path="/login" >
-            <Login/>
+          <Route path="/register" >
+            <Register/>
           </Route>
 
           <Route path="/feed" >
