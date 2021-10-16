@@ -141,62 +141,62 @@ export default function Feed() {
   };
 
   const News: NewsProps[] = [
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
-    {
-      photo_url:
-        "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-      title: "Taylor Swift divulga data da regravação do seu álbum Red",
-      resume:
-        "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-      source: "Globo.com",
-    },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
+    // {
+    //   photo_url:
+    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
+    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
+    //   resume:
+    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
+    //   source: "Globo.com",
+    // },
   ];
 
   const [user, setUser] = useState<UserProps>();
@@ -333,7 +333,7 @@ export default function Feed() {
             ))
           ) : (
             <AnimationContainer>
-              <Title>Os post de quem você seguir apareceram aqui!</Title>
+              <Title>Os post de quem você seguir aparecerão aqui!</Title>
               <Player autoplay loop src={Follow} style={{ width: "500px" }} />
 
               <HomeLink to="/feed" style={{ color: "#f2f2f2" }}>
