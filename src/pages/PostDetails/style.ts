@@ -26,7 +26,7 @@ export const BottomLeftContainer = styled.div`
 `
 
 export const WrapperContainer = styled.div`
-  width: 90%;
+  width: 80%;
   height: 17rem;
   margin: 0 auto;
   overflow-x: auto;
@@ -37,7 +37,6 @@ export const WrapperContainer = styled.div`
     }
     ::-webkit-scrollbar-thumb{
         background: #5E19A2;
-        
         border-radius: 1rem;
     }
 `
@@ -65,11 +64,12 @@ export const TopContainer = styled.div`
 `
 
 export const CommentsContainer = styled.div`
-  width: 90%;
+  min-width: 40%;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  margin-right: 1rem;
 
   img.User{
     width: 4rem;
@@ -77,6 +77,7 @@ export const CommentsContainer = styled.div`
   }
 
   div{
+    min-width: 10%;
     color: #f2f2f2;
     line-height: 1.5rem;
   }
@@ -84,7 +85,7 @@ export const CommentsContainer = styled.div`
   div.ButtonContainer{
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-direction: column;
 
     img{
