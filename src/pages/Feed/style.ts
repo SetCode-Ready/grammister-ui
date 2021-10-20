@@ -116,7 +116,21 @@ export const IconsContainer = styled.div`
         cursor: pointer;
         width: 55px;
         height: 55px;
+        z-index: 9999;
     }
+
+    div{
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        p{
+            color: #f2f2f2;
+        }
+    }
+
 `
 
 export const RecentReproductionContainer = styled.div`
@@ -183,6 +197,41 @@ export const CenterContainer = styled.div`
     }
 `
 
+export const PostContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    margin: 1rem auto;
+
+    p{
+        color: #f2f2f2;
+    }
+`
+export const CreatePostInputContainer = styled.div`
+    width: 90%;
+    background-color: #441276;
+    margin: 0 auto;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    p{
+        color: #f2f2f2;
+    }
+
+    input{
+        width: 90%;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        border: 0;
+        margin-bottom: 0.75rem;
+    }
+`
+
 export const ScrollContainer = styled.div`
     width: 80%;
     margin: 0 auto;
@@ -205,6 +254,7 @@ export const UserInfo = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom: 0;
 
     div{
         padding-left: 0.5rem;
@@ -286,22 +336,31 @@ export const NewsContainer = styled.div`
     width: 95%;
     background-color: #441276;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
     padding: 0.5rem;
     border-radius: 1rem;
     position: relative;
     
-    img{
-        width: 90px;
+    div.Image{
+        width: 200px;
+        height: 100px;
         border-radius: 1rem;
         margin-right: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        img{
+            width: 90px;
+            height: 90px;
+            border-radius: 1rem;
+        }
     }
 
     p{
         width: 100%;
         color: #f2f2f2;
         line-height: 1.25rem;
+        margin-bottom: 1rem;
     }
 
     &:last-of-type{
@@ -312,12 +371,13 @@ export const NewsContainer = styled.div`
         margin-top: 1.5rem;
     }
 
-    span{
+    a{
         font-size: 12px;
         position: absolute;
         bottom: 0.25rem;
         right: 0.5rem;
         color: #f2f2f2;
+        margin-top: 1rem;
     }
 
 `

@@ -27,7 +27,7 @@ export const BottomLeftContainer = styled.div`
 
 export const WrapperContainer = styled.div`
   width: 90%;
-  height: 27rem;
+  height: 17rem;
   margin: 0 auto;
   overflow-x: auto;
 

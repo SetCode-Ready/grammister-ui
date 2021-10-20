@@ -1,7 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { LeftContainer, MainContainer, RightContainer, TopContainer, BottomLeftContainer, CommentsContainer, WrapperContainer } from './style'
+import React, { useEffect, useState } from "react";
+import {
+  LeftContainer,
+  MainContainer,
+  RightContainer,
+  TopContainer,
+  BottomLeftContainer,
+  CommentsContainer,
+  WrapperContainer,
+} from "./style";
 import Comment from "../../assets/COMMENT.png";
-import { DetailContainer, HighlightMusicContainer, IconsContainer, PostContentContainer, PostImg, StyledP, UserInfo } from '../Feed/style';
+import {
+  CreatePostInputContainer,
+  DetailContainer,
+  HighlightMusicContainer,
+  IconsContainer,
+  PostContainer,
+  PostContentContainer,
+  PostImg,
+  StyledP,
+  UserInfo,
+} from "../Feed/style";
 import Perfil from "../../assets/PERFIL.png";
 import Spotify from "../../assets/PLAYSPOTIFY.png";
 import Album from "../../assets/ALBUMVIEW.png";
@@ -14,123 +32,107 @@ import Home from "../../assets/HOME.png";
 import Notification from "../../assets/NOTIFICATION.png";
 import Charts from "../../assets/CHARTS.png";
 import Chat from "../../assets/CHAT.png";
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from "react-router";
+import { useMutation, useQuery } from "@apollo/client";
+import { CREATE_COMMENT, GET_POST_BY_ID } from "../../Graphql";
+import { Button } from "../../components/Button/style";
+import toast from "react-hot-toast";
 
 interface PostsProps {
-	id: Number;
+  id: Number;
   user_photo_url: string;
-  name: string;
-  time: string;
+  username: string;
+  createdAt: any;
   album_artist: string;
   music: string;
   album_url: string;
+  body: string;
 }
 
 interface CommentsProps {
   id: number;
-  photo_url: string;
-  author: string;
-  content: string
+  body: string;
+  username: string;
+}
+
+interface ParamsProps {
+  id: string;
 }
 
 export default function PostDetails() {
-
   const history = useHistory();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const Post: PostsProps = {
-			id: 1,
-      user_photo_url:
-        "https://media-exp1.licdn.com/dms/image/C4E03AQE2XF1eRO5WVQ/profile-displayphoto-shrink_200_200/0/1618354907753?e=1636588800&v=beta&t=vlrIgUNjVPqti6mE9GfcDULlA3WbsPIyRpuApOmgbQo",
-      name: "Kaue Cavalcante",
-      time: "00:00",
-      album_artist: "single - Sidoka",
-      music: "não me sinto mal mais ",
-      album_url:
-      "https://i.scdn.co/image/ab67616d0000b2731978b272d0d81c0787744e81",
+  const { id } = useParams<ParamsProps>();
+
+  const { data, refetch } = useQuery(GET_POST_BY_ID, {
+    variables: { postId: id },
+  });
+
+  const [post, setPost] = useState<PostsProps>();
+  const [comments, setComments] = useState<CommentsProps[]>();
+  const [commentBody, setCommentBody] = useState("");
+
+  const [createComment] = useMutation(CREATE_COMMENT);
+
+  async function handleCreateComment() {
+    if (commentBody === "") {
+      toast.error("Digite algo antes de comentar!");
+      return;
+    }
+
+    await createComment({
+      variables: {
+        postId: id,
+        body: commentBody,
+      },
+    });
+
+    refetch();
+    setCommentBody("");
   }
 
-  const Comments: CommentsProps[] = [
-    {
-      id: 1,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 2,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 3,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 4,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 5,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 6,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 7,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-    {
-      id: 8,
-      photo_url: "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg",
-      author: "Emanuel",
-      content: "música muito maneira mano! Vou até salvar aqui"
-    },
-  ]
-
-  const [post, setPost] = useState<PostsProps>()
-  const [comments, setComments] = useState<CommentsProps[]>()
-
   useEffect(() => {
-    setPost(Post)
-    setComments(Comments)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    console.log(data);
+    if (data) {
+      setPost(data.findPostById);
+      setComments(data.findPostById.comments);
+    }
+  }, [data]);
 
   return (
     <MainContainer>
       <LeftContainer>
-      <PostContentContainer style={{width: "100%", height: "100%"}} >
-                <UserInfo>
-                  <PostImg src={Perfil} alt="foto do usuário" />
-                  <div>
-                    <StyledP size={18} color="#f2f2f2" bold={600}>
-                      {post?.name}
-                    </StyledP>
-                    <StyledP size={10} color="#B793FF" bold={600}>
-                      {" "}
-                      <Clock /> em {post?.time} pm
-                    </StyledP>
-                    <StyledP size={14} color="#B793FF" bold={600}>
-                      alterou sua música do momento
-                    </StyledP>
-                  </div>
-                </UserInfo>
+        <PostContentContainer style={{ width: "100%", height: "100%" }}>
+          <UserInfo>
+            <PostImg src={Perfil} alt="foto do usuário" />
+            <div>
+              <StyledP size={18} color="#f2f2f2" bold={600}>
+                {post?.username}
+              </StyledP>
+              <StyledP size={10} color="#B793FF" bold={600}>
+                {" "}
+                <Clock style={{ marginLeft: "-0.05rem" }} /> em{" "}
+                {post?.createdAt &&
+                  new Intl.DateTimeFormat("pt-BR").format(
+                    new Date(post?.createdAt)
+                  )}{" "}
+                as {post?.createdAt && new Date(post?.createdAt).getHours()}:
+                {post?.createdAt && new Date(post?.createdAt).getMinutes() < 10
+                  ? "0"
+                  : ""}
+                {post?.createdAt && new Date(post?.createdAt).getMinutes()} pm
+              </StyledP>
+              <StyledP size={14} color="#B793FF" bold={600}>
+                postou
+              </StyledP>
+            </div>
+          </UserInfo>
 
-                <HighlightMusicContainer
+          <PostContainer>
+            <p>{post?.body}</p>
+          </PostContainer>
+
+          {/* <HighlightMusicContainer
                   style={{ height: "7rem", width: "70%", margin: "0 auto" }}
                 >
                   <img
@@ -148,25 +150,41 @@ export default function PostDetails() {
                     <img src={Spotify} alt="Spotifiy logo" />
                     <img src={Album} alt="Album logo" />
                   </div>
-                </HighlightMusicContainer>
+                </HighlightMusicContainer> */}
 
-                <IconsContainer
-                  style={{
-                    height: "6.6rem",
-                    width: "65%",
-                    margin: " 1rem auto",
-                  }}
-                >
-                  <img style={{width: "4rem", height: "4rem"}} src={Like} alt="Icone de like" />
-                  <img style={{width: "4rem", height: "4rem"}} src={New_Repost} alt="Icone do chat" />
-                  <img style={{width: "4rem", height: "4rem"}} src={Comment} alt="Icone de conversa" />
-                  <img style={{width: "4rem", height: "4rem"}} src={Share} alt="Icone de compartilhamento" />
-                </IconsContainer>
+          <IconsContainer
+            style={{
+              height: "6.6rem",
+              width: "65%",
+              margin: " 1rem auto",
+            }}
+          >
+            <img
+              style={{ width: "4rem", height: "4rem" }}
+              src={Like}
+              alt="Icone de like"
+            />
+            <img
+              style={{ width: "4rem", height: "4rem" }}
+              src={New_Repost}
+              alt="Icone do chat"
+            />
+            <img
+              style={{ width: "4rem", height: "4rem" }}
+              src={Comment}
+              alt="Icone de conversa"
+            />
+            <img
+              style={{ width: "4rem", height: "4rem" }}
+              src={Share}
+              alt="Icone de compartilhamento"
+            />
+          </IconsContainer>
 
-                <DetailContainer>
-                  <Arrow />
-                </DetailContainer>
-              </PostContentContainer>
+          <DetailContainer>
+            <Arrow />
+          </DetailContainer>
+        </PostContentContainer>
       </LeftContainer>
       <RightContainer>
         <TopContainer>
@@ -176,29 +194,67 @@ export default function PostDetails() {
 
         <WrapperContainer>
           {comments?.map((comment) => (
-            <CommentsContainer key={comment.id} >
-              <img className="User" src={comment.photo_url} alt="foto do usuário" />
+            <CommentsContainer key={comment.id}>
+              {/* <img className="User" src={comment.photo_url} alt="foto do usuário" /> */}
               <div>
-                <h3>{comment.author}</h3>
-                <p>{comment.content}</p>
+                <h3>{comment.username}</h3>
+                <p>{comment.body}</p>
               </div>
 
-              <div className="ButtonContainer" >
+              <div className="ButtonContainer">
                 <img src={Like} alt="Icone de like" />
                 <img src={Share} alt="Icone de compartilhamento" />
               </div>
             </CommentsContainer>
           ))}
         </WrapperContainer>
+          <CreatePostInputContainer>
+            <p>Comente</p>
+            <input
+              value={commentBody}
+              onChange={(e) => setCommentBody(e.target.value)}
+              type="text"
+            />
+            <Button
+              onClick={handleCreateComment}
+              style={{ padding: "0.25rem", width: "20%" }}
+            >
+              Postar
+            </Button>
+          </CreatePostInputContainer>
       </RightContainer>
       <BottomLeftContainer>
-          <IconsContainer style={{width: "100%", height: "100%", marginTop: "0", justifyContent: "space-evenly"}} >
-            <img onClick={() => history.push('/feed')} style={{width: "4rem", height: "4rem"}} src={Home} alt="Icone da home" />
-            <img style={{width: "4rem", height: "4rem"}} src={Chat} alt="Icone do chat" />
-            <img style={{width: "4rem", height: "4rem"}} src={Charts} alt="Icone do grafico" />
-            <img style={{width: "4rem", height: "4rem"}} src={Notification} alt="Icone das notificações" />
-          </IconsContainer>
+        <IconsContainer
+          style={{
+            width: "100%",
+            height: "100%",
+            marginTop: "0",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <img
+            onClick={() => history.push("/feed")}
+            style={{ width: "4rem", height: "4rem" }}
+            src={Home}
+            alt="Icone da home"
+          />
+          <img
+            style={{ width: "4rem", height: "4rem" }}
+            src={Chat}
+            alt="Icone do chat"
+          />
+          <img
+            style={{ width: "4rem", height: "4rem" }}
+            src={Charts}
+            alt="Icone do grafico"
+          />
+          <img
+            style={{ width: "4rem", height: "4rem" }}
+            src={Notification}
+            alt="Icone das notificações"
+          />
+        </IconsContainer>
       </BottomLeftContainer>
     </MainContainer>
-  )
+  );
 }

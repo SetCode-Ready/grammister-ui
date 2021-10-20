@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { BaseSyntheticEvent,  useEffect, useRef, useState } from "react";
 import Perfil from "../../assets/PERFIL.png";
 import CapaPerfil from "../../assets/folklore.png";
 import Spotify from "../../assets/PLAYSPOTIFY.png";
@@ -36,10 +36,19 @@ import {
   StyledP,
   Title,
   UserInfo,
+  PostContainer,
+  CreatePostInputContainer
 } from "./style";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { HomeLink } from "../Error/style";
 import { useHistory } from "react-router";
+import api from "../../config/Axios";
+import { AxiosResponse } from "axios";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
+import { CREATE_POST, GET_POST, LIKE_POST } from "../../Graphql";
+import { HomeLink } from "../Error/style";
+import { Button } from "../../components/Button/style";
+import toast from "react-hot-toast";
 
 interface music {
   img: string;
@@ -56,61 +65,33 @@ interface UserProps {
 }
 
 interface PostsProps {
-	id: Number;
+	id: number;
   user_photo_url: string;
-  name: string;
-  time: string;
+  username: string;
+  createdAt: string;
   album_artist: string;
   music: string;
   album_url: string;
+  commentCount: number;
+  likeCount: number;
+  body: string;
 }
 
 interface NewsProps {
-  photo_url: string;
+  urlToImage: string;
   title: string;
-  resume: string;
-  source: string;
+  description: string;
+  source: {
+    id: string;
+    name: string;
+  };
+  url: string;
 }
 
 export default function Feed() {
 	const history = useHistory()
 
-  const Posts: PostsProps[] = [
-    {
-			id: 1,
-      user_photo_url:
-        "https://media-exp1.licdn.com/dms/image/C4E03AQE2XF1eRO5WVQ/profile-displayphoto-shrink_200_200/0/1618354907753?e=1636588800&v=beta&t=vlrIgUNjVPqti6mE9GfcDULlA3WbsPIyRpuApOmgbQo",
-      name: "Kaue Cavalcante",
-      time: "00:00",
-      album_artist: "single - Sidoka",
-      music: "não me sinto mal mais ",
-      album_url:
-        "https://i.scdn.co/image/ab67616d0000b2731978b272d0d81c0787744e81",
-    },
-    {
-			id: 2,
-      user_photo_url:
-        "https://media-exp1.licdn.com/dms/image/C4E03AQE2XF1eRO5WVQ/profile-displayphoto-shrink_200_200/0/1618354907753?e=1636588800&v=beta&t=vlrIgUNjVPqti6mE9GfcDULlA3WbsPIyRpuApOmgbQo",
-      name: "Kaue Cavalcante",
-      time: "00:00",
-      album_artist: "single - Sidoka",
-      music: "não me sinto mal mais ",
-      album_url:
-        "https://i.scdn.co/image/ab67616d0000b2731978b272d0d81c0787744e81",
-    },
-    {
-			id: 3,
-      user_photo_url:
-        "https://media-exp1.licdn.com/dms/image/C4E03AQE2XF1eRO5WVQ/profile-displayphoto-shrink_200_200/0/1618354907753?e=1636588800&v=beta&t=vlrIgUNjVPqti6mE9GfcDULlA3WbsPIyRpuApOmgbQo",
-      name: "Kaue Cavalcante",
-      time: "00:00",
-      album_artist: "single - Sidoka",
-      music: "não me sinto mal mais ",
-      album_url:
-        "https://i.scdn.co/image/ab67616d0000b2731978b272d0d81c0787744e81",
-    },
-  ];
-
+  
   const cicero: UserProps = {
     name: "Cícero Henrique",
     clan: "Swifties",
@@ -139,73 +120,72 @@ export default function Feed() {
       },
     ],
   };
-
-  const News: NewsProps[] = [
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-    // {
-    //   photo_url:
-    //     "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-    //   title: "Taylor Swift divulga data da regravação do seu álbum Red",
-    //   resume:
-    //     "Taylor swift por meio de suas redes sociais divulgou que a regravação do seu álbum Red deve chegar no dia 19 de Novembro deste ano, no outono americano...",
-    //   source: "Globo.com",
-    // },
-  ];
-
+  
+  
+  
   const [user, setUser] = useState<UserProps>();
-
+  
   const [posts, setPosts] = useState<PostsProps[]>([]);
-
+  
   const [news, setNews] = useState<NewsProps[]>([]);
-
+  
   const [expandNews, setExpandNews] = useState(false);
+  
+  const [postBody, setPostBody] = useState('');
+  
+  let {data: dataPosts, refetch: refetchPosts} = useQuery(GET_POST)
+
+  let [create] = useMutation(CREATE_POST, {errorPolicy: 'all'})
+
+  
+  let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
+
+  async function handleLikePost(id: number, event: Event | BaseSyntheticEvent){
+    event.stopPropagation()
+    await like({
+      variables: {
+        postId: id
+      }
+    })
+
+    refetchPosts()
+  }
+
+  async function handleCreatePost(){
+
+    if(postBody === ''){
+      toast.error("Não deixe o post em branco!")
+      return
+    }
+    
+    try {
+      await create({
+        variables:{
+          body: postBody
+        }
+      })
+      
+      refetchPosts()  
+      setPostBody('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function handleSelectPost(id: number){
+    history.push(`/post_details/${id}`)
+  }
+
+  async function GetNews(){
+    try{
+      const response: AxiosResponse<any, any> = await api.get("/news")
+
+      setNews(response.data.articles)
+    } catch(e){
+      console.log(e)
+    }
+  }
+
 
   const styles = useSpring({
     gridTemplateColumns: expandNews ? "1fr 1fr 2fr" : "1fr 2fr 1fr",
@@ -214,10 +194,17 @@ export default function Feed() {
   const newsContainer = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setUser(cicero);
-    setPosts(Posts);
-    setNews(News);
+    GetNews()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    refetchPosts()
+    if(dataPosts){
+      console.log(dataPosts.findAllPosts)
+      setPosts(dataPosts.findAllPosts)
+    }
+  }, [dataPosts, refetchPosts])
 
   return (
     <FeedContainer className={expandNews ? "expandedMain" : ""} style={styles}>
@@ -274,26 +261,37 @@ export default function Feed() {
         </ReturnToFeed>
       ) : (
         <CenterContainer>
+          <CreatePostInputContainer>
+            <p>Crie seu post</p>
+            <input value={postBody} onChange={e => setPostBody(e.target.value)} type="text" />
+            <Button onClick={handleCreatePost} style={{padding: '0.25rem', width: '20%'}} >Postar</Button>
+          </CreatePostInputContainer>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <PostContentContainer onClick={() => history.push(`/post_details/${post.id}`)}>
+              <PostContentContainer key={post.id} onClick={() => handleSelectPost(post.id)}>
                 <UserInfo>
                   <PostImg src={Perfil} alt="foto do usuário" />
                   <div>
                     <StyledP size={18} color="#f2f2f2" bold={600}>
-                      {post.name}
+                      {post.username}
                     </StyledP>
                     <StyledP size={10} color="#B793FF" bold={600}>
                       {" "}
-                      <Clock /> em {post.time} pm
+                      <Clock style={{marginLeft: '-0.05rem'}} /> em {
+                      new Intl.DateTimeFormat('pt-BR').format(new Date(post.createdAt))} as {new Date(post.createdAt).getHours()}:{new Date(post.createdAt).getMinutes() < 10 ? '0' : ''}{new Date(post.createdAt).getMinutes()} pm
                     </StyledP>
                     <StyledP size={14} color="#B793FF" bold={600}>
-                      alterou sua música do momento
+                      Postou
                     </StyledP>
                   </div>
                 </UserInfo>
 
-                <HighlightMusicContainer
+
+                <PostContainer>
+                  <p>{post.body}</p>
+                </PostContainer>
+
+                {/* <HighlightMusicContainer
                   style={{ height: "7rem", width: "70%", margin: "0 auto" }}
                 >
                   <img
@@ -311,18 +309,25 @@ export default function Feed() {
                     <img src={Spotify} alt="Spotifiy logo" />
                     <img src={Album} alt="Album logo" />
                   </div>
-                </HighlightMusicContainer>
+                </HighlightMusicContainer> */}
 
                 <IconsContainer
                   style={{
                     height: "6rem",
                     width: "65%",
-                    margin: " 0.4rem auto",
+                    margin: " 0.5rem auto",
+                    alignItems: "flex-start"
                   }}
                 >
-                  <img src={Like} alt="Icone da home" />
+                  <div>
+                    <img onClick={(event) => handleLikePost(post.id, event)} src={Like} alt="Icone da home" />
+                    <p>{post.likeCount}</p>
+                  </div>
                   <img src={New_Repost} alt="Icone do chat" />
+                  <div>
                   <img src={Comment} alt="Icone do grafico" />
+                    <p>{post.commentCount}</p>
+                  </div>
                   <img src={Share} alt="Icone das notificações" />
                 </IconsContainer>
 
@@ -357,16 +362,18 @@ export default function Feed() {
           {news.length > 0 && <Title>Últimas Notícias</Title>}
           {news.length > 0 ? (
             news.map((news) => (
-              <NewsContainer>
-                <img src={news.photo_url} alt="Foto da noticia" />
+              <NewsContainer key={news.urlToImage}>
+                <div className="Image">
+                  <img width="90px" src={news.urlToImage} alt="news.title"/>
+                </div>
                 <div>
                   <p className={expandNews ? "titleExpanded" : ""}>
                     {news.title}
                   </p>
-                  <span className={expandNews ? "sourceExpanded" : ""}>
-                    Por: {news.source}
-                  </span>
-                  {expandNews && <p>{news.resume}</p>}
+                  <Link to={{pathname: `${news.url}`}} target="_blank" className={expandNews ? "sourceExpanded" : ""}>
+                    Por: {news.source.name}
+                  </Link>
+                  {expandNews && <p>{news.description}</p>}
                 </div>
               </NewsContainer>
             ))

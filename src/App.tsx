@@ -11,10 +11,14 @@ import Register from './pages/Register';
 import Error from './pages/Error';
 import Feed from './pages/Feed';
 import PostDetails from './pages/PostDetails';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './config/ApolloClient';
+import Auth from './context/Auth';
 
 function App() {
   return (
-    <>
+      <Auth>
+    <ApolloProvider client={client}>
       <GlobalStyle/>
       <Toaster/>
       <Router>
@@ -42,7 +46,8 @@ function App() {
 
         </Switch>
       </Router>
-    </>
+    </ApolloProvider>
+    </Auth>
   );
 }
 
