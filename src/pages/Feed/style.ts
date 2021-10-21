@@ -116,7 +116,6 @@ export const IconsContainer = styled.div`
         cursor: pointer;
         width: 55px;
         height: 55px;
-        z-index: 9999;
     }
 
     div{
@@ -198,11 +197,21 @@ export const CenterContainer = styled.div`
 `
 
 export const PostContainer = styled.div`
+    height: 7rem;
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 90%;
     margin: 1rem auto;
+    overflow-x: auto;
+
+    ::-webkit-scrollbar{
+        background-color: transparent;
+        width: 0.4rem;
+    }
+    ::-webkit-scrollbar-thumb{
+        background: #F46036;
+        border-radius: 1rem;
+    }
 
     p{
         color: #f2f2f2;
@@ -244,7 +253,6 @@ export const PostContentContainer = styled.div`
     border-radius: 1rem;
     position: relative;
     margin-bottom: 1.5rem;
-    cursor: pointer;
 `
 
 export const UserInfo = styled.div`

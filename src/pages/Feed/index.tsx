@@ -268,7 +268,7 @@ export default function Feed() {
           </CreatePostInputContainer>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <PostContentContainer key={post.id} onClick={() => handleSelectPost(post.id)}>
+              <PostContentContainer key={post.id} onClick={() => handleSelectPost(post.id)} style={{cursor: 'pointer'}}>
                 <UserInfo>
                   <PostImg src={Perfil} alt="foto do usuário" />
                   <div>
@@ -287,7 +287,7 @@ export default function Feed() {
                 </UserInfo>
 
 
-                <PostContainer>
+                <PostContainer style={{overflowX: 'unset', height: "auto"}} >
                   <p>{post.body}</p>
                 </PostContainer>
 
@@ -320,7 +320,7 @@ export default function Feed() {
                   }}
                 >
                   <div>
-                    <img onClick={(event) => handleLikePost(post.id, event)} src={Like} alt="Icone da home" />
+                    <img onClick={(event) => handleLikePost(post.id, event)} src={Like} alt="Icone de curtir" />
                     <p>{post.likeCount}</p>
                   </div>
                   <img src={New_Repost} alt="Icone do chat" />

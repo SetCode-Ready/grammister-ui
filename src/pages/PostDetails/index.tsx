@@ -34,7 +34,7 @@ import Charts from "../../assets/CHARTS.png";
 import Chat from "../../assets/CHAT.png";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COMMENT, GET_POST_BY_ID } from "../../Graphql";
+import { CREATE_COMMENT, GET_POST_BY_ID, LIKE_POST } from "../../Graphql";
 import { Button } from "../../components/Button/style";
 import toast from "react-hot-toast";
 
@@ -47,6 +47,8 @@ interface PostsProps {
   music: string;
   album_url: string;
   body: string;
+  likeCount:number;
+  commentCount: number;
 }
 
 interface CommentsProps {
@@ -74,6 +76,8 @@ export default function PostDetails() {
 
   const [createComment] = useMutation(CREATE_COMMENT);
 
+  let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
+
   async function handleCreateComment() {
     if (commentBody === "") {
       toast.error("Digite algo antes de comentar!");
@@ -91,13 +95,23 @@ export default function PostDetails() {
     setCommentBody("");
   }
 
+  async function handleLikePost(id: string){
+    await like({
+      variables: {
+        postId: id
+      }
+    })
+
+    refetch()
+  }
+
   useEffect(() => {
-    console.log(data);
+    refetch()
     if (data) {
       setPost(data.findPostById);
       setComments(data.findPostById.comments);
     }
-  }, [data]);
+  }, [data, refetch]);
 
   return (
     <MainContainer>
@@ -128,7 +142,7 @@ export default function PostDetails() {
             </div>
           </UserInfo>
 
-          <PostContainer>
+          <PostContainer style={{paddingRight: '0.5rem', height: "7rem"}} >
             <p>{post?.body}</p>
           </PostContainer>
 
@@ -154,26 +168,34 @@ export default function PostDetails() {
 
           <IconsContainer
             style={{
-              height: "6.6rem",
+              height: "5rem",
               width: "65%",
-              margin: " 1rem auto",
+              margin: "2rem auto 1rem auto",
+              alignItems: "flex-start"
             }}
           >
-            <img
-              style={{ width: "4rem", height: "4rem" }}
-              src={Like}
-              alt="Icone de like"
-            />
+            <div>
+              <img
+                style={{ width: "4rem", height: "4rem" }}
+                src={Like}
+                alt="Icone de like"
+                onClick={() => handleLikePost(id)}
+              />
+              <p>{post?.likeCount}</p>
+            </div>
             <img
               style={{ width: "4rem", height: "4rem" }}
               src={New_Repost}
-              alt="Icone do chat"
+              alt="Icone do compartilhamento"
             />
-            <img
-              style={{ width: "4rem", height: "4rem" }}
-              src={Comment}
-              alt="Icone de conversa"
-            />
+            <div>
+              <img
+                style={{ width: "4rem", height: "4rem" }}
+                src={Comment}
+                alt="Icone de comenarios"
+                />
+              <p>{post?.commentCount}</p>
+            </div>
             <img
               style={{ width: "4rem", height: "4rem" }}
               src={Share}

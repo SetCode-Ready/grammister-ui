@@ -27,7 +27,7 @@ export const GET_POST = gql`
 export const GET_POST_BY_ID = gql`
   query findPostById($postId: ID!){
     findPostById(postId: $postId){
-      likeCount email body createdAt username comments {
+      likeCount commentCount email body createdAt username comments {
         body id username
       }
     }
