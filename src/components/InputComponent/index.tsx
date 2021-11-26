@@ -9,14 +9,15 @@ interface InputProps {
     justify?: string
     align?: string
     margin?: string
+    type: string
 }
 
 
-export default function InputComponent({inputW, name, label, justify, align, margin, erro}: InputProps) {
+export default function InputComponent({inputW, name, label, justify, align, margin, erro, type}: InputProps) {
     return (
         <InputContainer inputW={inputW} justify={justify} align={align} margin={margin}>
             <label>{label}</label>
-            <Input name={name} />
+            <Input type={type} name={name} />
             {erro && (
                 <p>{erro}</p>
             )}

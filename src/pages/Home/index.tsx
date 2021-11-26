@@ -131,12 +131,14 @@ export default function Home() {
             <InputComponent
               inputW="70"
               name="email"
+              type={"email"}
               label="Email:"
               erro={errors.email}
             />
 
             <InputComponent
               inputW="70"
+              type={"password"}
               name="password"
               label="Senha:"
               erro={errors.password}

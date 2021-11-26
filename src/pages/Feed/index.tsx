@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent,  useEffect, useRef, useState } from "react";
+import React, { BaseSyntheticEvent,  useContext,  useEffect, useRef, useState } from "react";
 import Perfil from "../../assets/PERFIL.png";
 import CapaPerfil from "../../assets/folklore.png";
 import Spotify from "../../assets/PLAYSPOTIFY.png";
@@ -49,6 +49,8 @@ import { CREATE_POST, GET_POST, LIKE_POST } from "../../Graphql";
 import { HomeLink } from "../Error/style";
 import { Button } from "../../components/Button/style";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../context/Auth";
+import jwt_decode from 'jwt-decode';
 
 interface music {
   img: string;
@@ -57,11 +59,12 @@ interface music {
 }
 
 interface UserProps {
-  name: string;
-  clan: string;
-  moment_music: string;
-  album_artist: string;
-  recent_reproduction: music[];
+  username: string;
+  email: string;
+  id: string;
+  // moment_music: string;
+  // album_artist: string;
+  // recent_reproduction: music[];
 }
 
 interface PostsProps {
@@ -91,37 +94,10 @@ interface NewsProps {
 export default function Feed() {
 	const history = useHistory()
 
-  
-  const cicero: UserProps = {
-    name: "Cícero Henrique",
-    clan: "Swifties",
-    moment_music: "august",
-    album_artist: "folklore - Taylor Swift",
-    recent_reproduction: [
-      {
-        img: "https://upload.wikimedia.org/wikipedia/pt/f/f8/Taylor_Swift_-_Folklore.png",
-        name: "august",
-        album: "folklore - Taylor Swift",
-      },
-      {
-        img: "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-        name: "august",
-        album: "folklore - Taylor Swift",
-      },
-      {
-        img: "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-        name: "august",
-        album: "folklore - Taylor Swift",
-      },
-      {
-        img: "https://upload.wikimedia.org/wikipedia/pt/4/4f/Evermore_-_Taylor_Swift.png",
-        name: "august",
-        album: "folklore - Taylor Swift",
-      },
-    ],
-  };
-  
-  
+  const {getTokenOnLocalStorage} = useContext(AuthContext)
+
+  const token = getTokenOnLocalStorage()
+
   
   const [user, setUser] = useState<UserProps>();
   
@@ -134,12 +110,11 @@ export default function Feed() {
   const [postBody, setPostBody] = useState('');
   
   let {data: dataPosts, refetch: refetchPosts} = useQuery(GET_POST)
-
+  
   let [create] = useMutation(CREATE_POST, {errorPolicy: 'all'})
-
   
   let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
-
+  
   async function handleLikePost(id: number, event: Event | BaseSyntheticEvent){
     event.stopPropagation()
     await like({
@@ -147,14 +122,14 @@ export default function Feed() {
         postId: id
       }
     })
-
+    
     refetchPosts()
   }
-
+  
   async function handleCreatePost(){
-
+    
     if(postBody === ''){
-      toast.error("Não deixe o post em branco!")
+      toast.error("Compartilhe algo com a gente! 😥 ")
       return
     }
     
@@ -171,33 +146,33 @@ export default function Feed() {
       console.log(error)
     }
   }
-
+  
   function handleSelectPost(id: number){
     history.push(`/post_details/${id}`)
   }
-
+  
   async function GetNews(){
     try{
       const response: AxiosResponse<any, any> = await api.get("/news")
-
+      
       setNews(response.data.articles)
     } catch(e){
       console.log(e)
     }
   }
-
-
+  
+  
   const styles = useSpring({
     gridTemplateColumns: expandNews ? "1fr 1fr 2fr" : "1fr 2fr 1fr",
   });
-
+  
   const newsContainer = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
-    setUser(cicero);
     GetNews()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   useEffect(() => {
     refetchPosts()
     if(dataPosts){
@@ -205,19 +180,25 @@ export default function Feed() {
       setPosts(dataPosts.findAllPosts)
     }
   }, [dataPosts, refetchPosts])
+  
+    useEffect(() => {
+      const user: UserProps = jwt_decode(token)
+
+      setUser(user)
+    }, [token])
 
   return (
     <FeedContainer className={expandNews ? "expandedMain" : ""} style={styles}>
       <LeftContainer>
         <img className="profile" src={Perfil} alt="foto do seu perfil" />
-        <p>{user?.name}</p>
+        <p>{user?.username}</p>
 
-        <span>{user?.clan}</span>
+        <span>{user?.email}</span>
 
         <MomentMusicContainer>
           <h2>Música do momento:</h2>
 
-          <HighlightMusicContainer>
+          {/* <HighlightMusicContainer>
             <img src={CapaPerfil} alt="Capa do album do perfil" />
             <div>
               <p style={{ fontSize: "16px", fontWeight: 600 }}>
@@ -229,7 +210,7 @@ export default function Feed() {
               <img src={Spotify} alt="Spotifiy logo" />
               <img src={Album} alt="Album logo" />
             </div>
-          </HighlightMusicContainer>
+          </HighlightMusicContainer> */}
 
           <IconsContainer>
             <img src={Home} alt="Icone da home" />
@@ -240,7 +221,7 @@ export default function Feed() {
         </MomentMusicContainer>
 
         <h2 className="RecentReproductionText">Reproduções recentes</h2>
-        <RecentReproductionContainer>
+        {/* <RecentReproductionContainer>
           {user?.recent_reproduction.map((music) => (
             <div className="reproduction-main">
               <img src={music.img} alt={music.album} />
@@ -250,7 +231,7 @@ export default function Feed() {
               </div>
             </div>
           ))}
-        </RecentReproductionContainer>
+        </RecentReproductionContainer> */}
       </LeftContainer>
       {expandNews ? (
         <ReturnToFeed>
@@ -331,9 +312,9 @@ export default function Feed() {
                   <img src={Share} alt="Icone das notificações" />
                 </IconsContainer>
 
-                <DetailContainer>
+                {/* <DetailContainer>
                   <Arrow />
-                </DetailContainer>
+                </DetailContainer> */}
               </PostContentContainer>
             ))
           ) : (
