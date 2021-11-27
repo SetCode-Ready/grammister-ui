@@ -19,7 +19,7 @@ export const LOGIN_USER = gql`
 export const GET_POST = gql`
   query {
   findAllPosts {
-    id  username commentCount likeCount body createdAt
+    id  username commentCount likeCount body createdAt email
   }
 }
 `
@@ -57,3 +57,26 @@ export const LIKE_POST = gql`
   }
 }
 `
+
+export const FIND_USERS_BY_NAME = gql`
+  query findUsersByName($userName: String!){
+  findUsersByName(userName: $userName) {
+    id name followers email
+  }
+}
+`
+
+export const FIND_USER_BY_ID = gql`
+  query findUserById($userId: ID!){
+  findUserById(userId: $userId) {
+    name followers email
+  }
+}
+`
+
+export const FOLLOW_USER = gql`
+  mutation FollowUser($userId: ID!) {
+    followUser(userId: $userId)
+  }
+`
+

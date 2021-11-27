@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
         width: 100vw;
         background: #441276;
     }
+
+    input::placeholder {
+        color: white;
+    }
 ` 
 
 export default GlobalStyle;

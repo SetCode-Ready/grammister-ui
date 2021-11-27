@@ -1,14 +1,108 @@
 import { animated } from 'react-spring';
 import styled from "styled-components";
 
-export const FeedContainer = styled(animated.main)`
-    width: 98%;
+export const HeaderContainer = styled.div`
+    width: 95%;
     margin: 1% auto;
+    height: 8vh;
+    background-color: #5E19A2;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+
+    input{
+        height:2rem;
+        width: 20rem;
+        border: 0;
+        background-color: #441276;
+        border-radius: 1rem;
+        color: white;
+        padding: 1rem;
+        font-size: 1rem;
+        position: relative;
+        z-index: 9999;
+    }
+
+    div.logout{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #441276;
+        width: 48px;
+        height: 48px;
+        border-radius: 1rem;
+        cursor: pointer;
+    }
+`
+
+export const SearchContainer = styled.div`
+    padding: 1rem;
+    width: 20rem;
+    height:auto;
+    min-height: 5rem;
+    background-color: #441276;
+    position: absolute;
+    top:2.25rem;
+    border-radius: 1rem;
+    overflow-x: auto;
+
+    ::-webkit-scrollbar{
+        background-color: transparent;
+        width: 0.4rem;
+    }
+    ::-webkit-scrollbar-thumb{
+        background: #F46036;
+        border-radius: 1rem;
+    }
+
+    p.nothing{
+            color: #F9F8F8;
+            text-align: center;
+        }
+
+    div{
+        border-bottom: 1px solid #F9F8F8;
+        margin: 0.25rem;
+        transition: 0.2s ;
+        cursor: pointer;
+
+        p{
+            color: #F9F8F8;
+            transition: 0.2s;
+            margin-top: 1rem;
+        }
+
+        h6{
+            color: #d3d3d3;
+            transition: 0.2s;
+        }
+
+        &:hover{
+
+            p{
+                color: #AEAEAE;
+            }
+
+            h6{
+                color: #AEAEAE;
+            }
+
+        }
+    }
+
+
+`
+
+export const FeedContainer = styled(animated.main)`
+    width: 95%;
+    margin: 0.25rem auto;
     background: transparent;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 1rem;
-    height: 95vh;
+    height: 85vh;
 
     &.expandedMain{
         grid-template-columns: 1fr 1fr 2fr;
@@ -119,7 +213,6 @@ export const IconsContainer = styled.div`
     }
 
     div{
-
         display: flex;
         align-items: center;
         justify-content: center;

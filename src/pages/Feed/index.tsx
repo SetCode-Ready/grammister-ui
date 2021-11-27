@@ -15,6 +15,8 @@ import NewsAnimation from "../../assets/NewsAnimation.json";
 import Follow from "../../assets/Follow.json";
 import { ReactComponent as Clock } from "../../assets/CLOCK.svg";
 import { ReactComponent as Arrow } from "../../assets/Arrow.svg";
+import { ReactComponent as Exit } from "../../assets/Exit.svg";
+
 import { useSpring } from "react-spring";
 import {
   AnimationContainer,
@@ -37,7 +39,9 @@ import {
   Title,
   UserInfo,
   PostContainer,
-  CreatePostInputContainer
+  CreatePostInputContainer,
+  HeaderContainer,
+  SearchContainer
 } from "./style";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useHistory } from "react-router";
@@ -45,7 +49,7 @@ import api from "../../config/Axios";
 import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_POST, GET_POST, LIKE_POST } from "../../Graphql";
+import { CREATE_POST, FIND_USERS_BY_NAME, GET_POST, LIKE_POST } from "../../Graphql";
 import { HomeLink } from "../Error/style";
 import { Button } from "../../components/Button/style";
 import toast from "react-hot-toast";
@@ -78,6 +82,7 @@ interface PostsProps {
   commentCount: number;
   likeCount: number;
   body: string;
+  email: string;
 }
 
 interface NewsProps {
@@ -91,14 +96,20 @@ interface NewsProps {
   url: string;
 }
 
+interface SearchProps{
+  id: string;
+  name: string;
+  followers: string[];
+  email: string;
+}
+
 export default function Feed() {
 	const history = useHistory()
 
-  const {getTokenOnLocalStorage} = useContext(AuthContext)
+  const {getTokenOnLocalStorage, removeTokenOnLocalStorage} = useContext(AuthContext)
 
   const token = getTokenOnLocalStorage()
 
-  
   const [user, setUser] = useState<UserProps>();
   
   const [posts, setPosts] = useState<PostsProps[]>([]);
@@ -109,11 +120,19 @@ export default function Feed() {
   
   const [postBody, setPostBody] = useState('');
   
+  const [search, setSearch] = useState('')
+
+  const [resultSearch, setResultSearch] = useState<SearchProps[]>([])
+
   let {data: dataPosts, refetch: refetchPosts} = useQuery(GET_POST)
   
   let [create] = useMutation(CREATE_POST, {errorPolicy: 'all'})
   
   let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
+
+  let {data: SearchData, refetch: refetchSearch} = useQuery(FIND_USERS_BY_NAME, {
+    variables: {userName: search}
+  })
   
   async function handleLikePost(id: number, event: Event | BaseSyntheticEvent){
     event.stopPropagation()
@@ -124,6 +143,10 @@ export default function Feed() {
     })
     
     refetchPosts()
+  }
+
+  async function handleDetail(event: Event | BaseSyntheticEvent){
+    event.stopPropagation()
   }
   
   async function handleCreatePost(){
@@ -176,24 +199,69 @@ export default function Feed() {
   useEffect(() => {
     refetchPosts()
     if(dataPosts){
-      console.log(dataPosts.findAllPosts)
       setPosts(dataPosts.findAllPosts)
     }
   }, [dataPosts, refetchPosts])
   
     useEffect(() => {
-      const user: UserProps = jwt_decode(token)
 
+      if(!token){
+        history.push("/")
+        return
+      }
+
+      const user: UserProps = jwt_decode(token)
       setUser(user)
     }, [token])
 
+    useEffect(() => {
+
+      refetchSearch()
+
+      if(SearchData){
+        setResultSearch(SearchData.findUsersByName)
+      }
+
+    }, [SearchData, refetchSearch, search])
+
+    async function handleLogoutUser(){
+      removeTokenOnLocalStorage("token")
+      removeTokenOnLocalStorage("userId")
+      history.push("/")
+    }
+
   return (
+    <>
+    <HeaderContainer>
+      <input placeholder="Encontre novar pessoas..." value={search} onChange={e => setSearch(e.target.value)}/>
+      
+      {search.length > 0 ? 
+        <SearchContainer>
+          {resultSearch.length > 0 ? resultSearch.map((data: SearchProps) => (
+            <div key={data.id} onClick={() => history.push(`/user/${data.id}`)} >
+              <p>{data.name}</p>
+              <h6>{data.email}</h6>
+              <h6>{data.followers.length} {data.followers.length > 1 ? "seguidores" : "seguidor"}</h6>
+            </div>
+          ))
+          :
+          <p className={"nothing"} >Nenhum usuário encontrado</p>}
+        </SearchContainer>
+        : 
+       ''}
+      
+      <div className={"logout"} onClick={handleLogoutUser}>
+        <Exit/>
+      </div>
+    </HeaderContainer>
     <FeedContainer className={expandNews ? "expandedMain" : ""} style={styles}>
       <LeftContainer>
-        <img className="profile" src={Perfil} alt="foto do seu perfil" />
-        <p>{user?.username}</p>
+        <img className="profile" src={Perfil} alt="foto do seu perfil"
+        onClick={() => history.push(`/user/${user?.id}`)} style={{cursor: 'pointer'}}
+        />
+        <p onClick={() => history.push(`/user/${user?.id}`)} style={{cursor: 'pointer'}} >{user?.username}</p>
 
-        <span>{user?.email}</span>
+        <span onClick={() => history.push(`/user/${user?.id}`)} style={{cursor: 'pointer'}} >{user?.email}</span>
 
         <MomentMusicContainer>
           <h2>Música do momento:</h2>
@@ -312,9 +380,10 @@ export default function Feed() {
                   <img src={Share} alt="Icone das notificações" />
                 </IconsContainer>
 
-                {/* <DetailContainer>
+                {post.email === user?.email ?
+                <DetailContainer onClick={handleDetail}>
                   <Arrow />
-                </DetailContainer> */}
+                </DetailContainer> :  ''}
               </PostContentContainer>
             ))
           ) : (
@@ -376,5 +445,6 @@ export default function Feed() {
         </ContentNewsContainer>
       </RightContainer>
     </FeedContainer>
+  </>
   );
 }
