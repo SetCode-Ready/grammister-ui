@@ -7,6 +7,7 @@ interface AuthProps {
 interface AuthContextProps {
   saveTokenOnLocalStorage: (fieldName: string, token: string) => void
   getTokenOnLocalStorage: () => string
+  removeTokenOnLocalStorage: (item: string) => void
 }
 export const AuthContext = createContext({} as AuthContextProps)
 
@@ -20,10 +21,15 @@ export default function Auth({children}: AuthProps) {
     return JSON.parse(window.localStorage.getItem('token')!)   
   }
 
+  function removeTokenOnLocalStorage(item: string){
+    window.localStorage.removeItem(item)
+  }
+
   return (
     <AuthContext.Provider value={{
       saveTokenOnLocalStorage,
-      getTokenOnLocalStorage
+      getTokenOnLocalStorage,
+      removeTokenOnLocalStorage
     }}>
       {children}
     </AuthContext.Provider>

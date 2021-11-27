@@ -14,6 +14,7 @@ import PostDetails from './pages/PostDetails';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './config/ApolloClient';
 import Auth from './context/Auth';
+import User from './pages/User';
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
           
           <Route path="/post_details/:id" >
             <PostDetails/>
+          </Route>
+
+          <Route path="/user/:id">
+            <User/>
           </Route>
 
           <Route path="*" >
