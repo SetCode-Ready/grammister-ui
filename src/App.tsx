@@ -15,6 +15,8 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from './config/ApolloClient';
 import Auth from './context/Auth';
 import User from './pages/User';
+import ForgotPassword from './pages/ForgotPassword';
+import ForgotPasswordEmail from './pages/ForgotPasswordEmail';
 
 function App() {
   return (
@@ -43,6 +45,10 @@ function App() {
 
           <Route path="/user/:id">
             <User/>
+          </Route>
+
+          <Route path="/forgot_password">
+            <ForgotPasswordEmail/>
           </Route>
 
           <Route path="*" >
