@@ -152,7 +152,25 @@ export const LeftContainer = styled.div`
 
 export const MomentMusicContainer = styled.div`
     width: 90%;
-    margin: 0 auto;
+    margin: 1rem auto;
+
+    button{
+        margin: 1rem 0;
+        border: 0;
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 14px;
+        background-color: #5E19A2;
+        color: white;
+        border-radius: 1rem;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+        &:hover{
+            background-color: #441276;
+        }
+    }
 
     h2{
         color: #441276;
@@ -199,17 +217,18 @@ export const HighlightMusicContainer = styled.div`
 `
 
 export const IconsContainer = styled.div`
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     width: 100%;
     height: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-grow: 1;
 
     img{
         cursor: pointer;
-        width: 55px;
-        height: 55px;
+        width: 3rem;
+        height: 3rem;
     }
 
     div{
@@ -294,8 +313,9 @@ export const PostContainer = styled.div`
     display: flex;
     justify-content: center;
     width: 90%;
-    margin: 1rem auto;
+    margin: 1rem;
     overflow-x: auto;
+    flex-grow: 3;
 
     ::-webkit-scrollbar{
         background-color: transparent;
@@ -316,22 +336,37 @@ export const CreatePostInputContainer = styled.div`
     margin: 0 auto;
     padding: 1rem;
     border-radius: 1rem;
-    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     flex-direction: column;
 
-    p{
-        color: #f2f2f2;
+    div{
+        width: 100%;
+        height: 10rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 1rem;
+        flex-direction: column;
+        margin: 0.5rem;
+        
+        textarea{
+            width: 90%;
+            border-radius: 0.25rem;
+            min-height: 5rem;
+            font-size: 16px;
+            padding: 0.25rem;
+            border: 0;
+            background-color: white;
+            resize: none;
+            margin-bottom: 1rem;
+            
+            ::-webkit-scrollbar{
+                display: none;
+            }
+        }
     }
 
-    input{
-        width: 90%;
-        border-radius: 0.25rem;
-        padding: 0.25rem;
-        border: 0;
-        margin-bottom: 0.75rem;
-    }
 `
 
 export const ScrollContainer = styled.div`
@@ -342,15 +377,19 @@ export const ScrollContainer = styled.div`
 export const PostContentContainer = styled.div`
     width: 90%;
     background-color: #441276;
-    margin: 0 auto;
+    margin: 1rem auto;
     border-radius: 1rem;
     position: relative;
-    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
 `
 
 export const UserInfo = styled.div`
+    flex-grow: 1;
     width: 90%;
-    padding: 1rem;
+    padding: 2rem;
     margin: 0.5rem auto;
     display: flex;
     align-items: center;
@@ -573,4 +612,74 @@ export const AnimationContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+`
+
+export const ContainerModal = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+    input{
+        width: 100%;
+        border: 0;
+        padding: 1rem;
+        border-radius: 1rem 1rem 0 0;
+        border-bottom: 1px solid white;
+        color: white;
+        background-color: #5E19A2;
+        font-size: 16px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    }
+
+    div.searchResult{
+        width: 100%;
+        background-color: #5E19A2;
+        min-height: 23rem;
+        height: auto;
+        overflow-x: auto;
+        
+
+        ::-webkit-scrollbar{
+        background-color: transparent;
+        width: 0.4rem;
+        }
+        ::-webkit-scrollbar-thumb{
+            background: white;
+            border-radius: 1rem;
+        }
+
+        div.musicContainer{
+            width: 100%;
+            padding: 0.5rem 1rem;
+            transition: 0.2s;
+            cursor: pointer;
+
+            h2{
+                color: white;
+            }
+
+            p{
+                color: white;
+            }
+
+            &:hover{
+                background-color: #240D53;
+            }
+        }
+
+        div.noSearch{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            flex-direction: column;
+
+            h5{
+                color: white
+            }
+        }
+    }
 `

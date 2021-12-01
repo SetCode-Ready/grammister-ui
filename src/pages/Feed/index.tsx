@@ -1,20 +1,17 @@
-import React, { BaseSyntheticEvent,  useContext,  useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState } from "react";
 import Perfil from "../../assets/PERFIL.png";
 import CapaPerfil from "../../assets/folklore.png";
-import Spotify from "../../assets/PLAYSPOTIFY.png";
 import Album from "../../assets/ALBUMVIEW.png";
 import Home from "../../assets/HOME.png";
+import LastFm from "../../assets/LastFm.svg";
+import close from "../../assets/close.png";
 import Notification from "../../assets/NOTIFICATION.png";
 import Charts from "../../assets/CHARTS.png";
 import Chat from "../../assets/CHAT.png";
-import Share from "../../assets/SHARE.png";
-import Comment from "../../assets/COMMENT.png";
-import New_Repost from "../../assets/NEW POSTORREPOST.png";
-import Like from "../../assets/LIKE.png";
 import NewsAnimation from "../../assets/NewsAnimation.json";
+import LoadingSearchMusic from "../../assets/LoadingSearchMusic.json";
 import Follow from "../../assets/Follow.json";
-import { ReactComponent as Clock } from "../../assets/CLOCK.svg";
-import { ReactComponent as Arrow } from "../../assets/Arrow.svg";
+import { ReactComponent as ArrowImage } from "../../assets/Arrow.svg";
 import { ReactComponent as Exit } from "../../assets/Exit.svg";
 
 import { useSpring } from "react-spring";
@@ -22,7 +19,6 @@ import {
   AnimationContainer,
   CenterContainer,
   ContentNewsContainer,
-  DetailContainer,
   ExpandNewsContainer,
   FeedContainer,
   HighlightMusicContainer,
@@ -30,18 +26,13 @@ import {
   LeftContainer,
   MomentMusicContainer,
   NewsContainer,
-  PostContentContainer,
-  PostImg,
-  RecentReproductionContainer,
   ReturnToFeed,
   RightContainer,
-  StyledP,
   Title,
-  UserInfo,
-  PostContainer,
   CreatePostInputContainer,
   HeaderContainer,
-  SearchContainer
+  SearchContainer,
+  ContainerModal
 } from "./style";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useHistory } from "react-router";
@@ -49,26 +40,34 @@ import api from "../../config/Axios";
 import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_POST, FIND_USERS_BY_NAME, GET_POST, LIKE_POST } from "../../Graphql";
+import { CREATE_POST, FIND_USERS_BY_NAME, GET_POST} from "../../Graphql";
 import { HomeLink } from "../Error/style";
 import { Button } from "../../components/Button/style";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../context/Auth";
 import jwt_decode from 'jwt-decode';
+import Modal from 'react-modal';
+import PostContentContainer from "../../components/PostContentContainer";
 
-interface music {
-  img: string;
+interface MusicProps {
+  id: number;
   name: string;
   album: string;
+  artist: string;
+  listeners: string;
+  url: string;
+}
+
+interface MusicMomentProps{
+  name: string;
+  artist: string;
+  url: string;
 }
 
 interface UserProps {
   username: string;
   email: string;
   id: string;
-  // moment_music: string;
-  // album_artist: string;
-  // recent_reproduction: music[];
 }
 
 interface PostsProps {
@@ -106,9 +105,9 @@ interface SearchProps{
 export default function Feed() {
 	const history = useHistory()
 
-  const {getTokenOnLocalStorage, removeTokenOnLocalStorage} = useContext(AuthContext)
+  const {getTokenOnLocalStorage, saveTokenOnLocalStorage, removeTokenOnLocalStorage} = useContext(AuthContext)
 
-  const token = getTokenOnLocalStorage()
+  const token = getTokenOnLocalStorage('token')
 
   const [user, setUser] = useState<UserProps>();
   
@@ -124,30 +123,19 @@ export default function Feed() {
 
   const [resultSearch, setResultSearch] = useState<SearchProps[]>([])
 
+  const [modal, setModal] = useState(false)
+
+  const [music, setMusic] = useState<MusicProps[]>([])
+
+  const [momentMusic, setMomentMusic] = useState<MusicMomentProps>()
+  
   let {data: dataPosts, refetch: refetchPosts} = useQuery(GET_POST)
   
   let [create] = useMutation(CREATE_POST, {errorPolicy: 'all'})
-  
-  let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
 
   let {data: SearchData, refetch: refetchSearch} = useQuery(FIND_USERS_BY_NAME, {
     variables: {userName: search}
   })
-  
-  async function handleLikePost(id: number, event: Event | BaseSyntheticEvent){
-    event.stopPropagation()
-    await like({
-      variables: {
-        postId: id
-      }
-    })
-    
-    refetchPosts()
-  }
-
-  async function handleDetail(event: Event | BaseSyntheticEvent){
-    event.stopPropagation()
-  }
   
   async function handleCreatePost(){
     
@@ -168,10 +156,6 @@ export default function Feed() {
     } catch (error) {
       console.log(error)
     }
-  }
-  
-  function handleSelectPost(id: number){
-    history.push(`/post_details/${id}`)
   }
   
   async function GetNews(){
@@ -212,7 +196,15 @@ export default function Feed() {
 
       const user: UserProps = jwt_decode(token)
       setUser(user)
-    }, [token])
+    }, [history, token])
+
+    useEffect(() => {
+      const music: any = getTokenOnLocalStorage("music")
+      if(music){
+        let moment = {name: music.name, artist: music.artist, url: music.url }
+        setMomentMusic(moment)
+      }
+    }, [getTokenOnLocalStorage])
 
     useEffect(() => {
 
@@ -227,7 +219,33 @@ export default function Feed() {
     async function handleLogoutUser(){
       removeTokenOnLocalStorage("token")
       removeTokenOnLocalStorage("userId")
+      removeTokenOnLocalStorage("music")
       history.push("/")
+    }
+
+    async function searchMusic(query: string){
+      if(query === ""){
+        setMusic([])
+      }
+      
+      const response: AxiosResponse<any, any> = await api.get(`/search-songs/${query}`)
+
+      setMusic(response.data)
+    }
+
+    function handleCloseModal(){
+      setModal(false)
+      setMusic([])
+    }
+
+    function handleSaveMusic(name: string, artist: string, url: string){
+      const music = {name, artist, url}
+      
+      saveTokenOnLocalStorage("music", music)
+
+      setMomentMusic(music)
+      setMusic([])
+      setModal(false)
     }
 
   return (
@@ -266,19 +284,55 @@ export default function Feed() {
         <MomentMusicContainer>
           <h2>Música do momento:</h2>
 
-          {/* <HighlightMusicContainer>
+          <button onClick={() => setModal(true)} >Selecione a sua música do momento</button>
+
+          <Modal
+            isOpen={modal}
+            overlayClassName={"SearchMusicModalOverlay"}
+            className={"SearchMusicModal"}
+          >
+            <img className={"CloseModal"} src={close} onClick={handleCloseModal} alt={"fechar modal"} />
+            <ContainerModal>
+              <input placeholder={"Digite o nome da música"} onChange={(e) => searchMusic(e.target.value)} />
+
+              <div className={"searchResult"} >
+                {music.length > 0 ?
+                 music.map(music => (
+                  <div onClick={() => handleSaveMusic(music.name, music.artist, music.url)} key={music.id} className={"musicContainer"}>
+                    <h2>Musica: {music.name}</h2>
+                    <p>Artista: {music.artist}</p>
+                    <p>{music.listeners} espectadores</p>
+                  </div>
+                 ))
+                 : 
+                  <div className={"noSearch"} >
+                    <Player
+                      autoplay
+                      loop
+                      src={LoadingSearchMusic}
+                      style={{ width: "150px", marginTop: "5rem" }}
+                    />
+                    <h5>Escolha uma música é se divirta</h5>
+                  </div>
+                 }
+              </div>
+            </ContainerModal>
+          </Modal>
+          
+
+          { momentMusic && <HighlightMusicContainer>
             <img src={CapaPerfil} alt="Capa do album do perfil" />
             <div>
               <p style={{ fontSize: "16px", fontWeight: 600 }}>
-                {user?.moment_music}
+                {momentMusic.name}
               </p>
-              <p>{user?.album_artist}</p>
+              <p>{momentMusic.artist}</p>
             </div>
             <div className="buttons">
-              <img src={Spotify} alt="Spotifiy logo" />
+              <img onClick={() => window.open(momentMusic.url, '_blank')}  src={LastFm} alt="LastFm logo" />
               <img src={Album} alt="Album logo" />
             </div>
-          </HighlightMusicContainer> */}
+          </HighlightMusicContainer> }
 
           <IconsContainer>
             <img src={Home} alt="Icone da home" />
@@ -288,7 +342,7 @@ export default function Feed() {
           </IconsContainer>
         </MomentMusicContainer>
 
-        <h2 className="RecentReproductionText">Reproduções recentes</h2>
+        {/* <h2 className="RecentReproductionText">Reproduções recentes</h2> */}
         {/* <RecentReproductionContainer>
           {user?.recent_reproduction.map((music) => (
             <div className="reproduction-main">
@@ -305,86 +359,21 @@ export default function Feed() {
         <ReturnToFeed>
           <h2>Retormar ao Feed</h2>
           <ExpandNewsContainer onClick={() => setExpandNews(!expandNews)}>
-            <Arrow />
+            
           </ExpandNewsContainer>
         </ReturnToFeed>
       ) : (
         <CenterContainer>
           <CreatePostInputContainer>
-            <p>Crie seu post</p>
-            <input value={postBody} onChange={e => setPostBody(e.target.value)} type="text" />
-            <Button onClick={handleCreatePost} style={{padding: '0.25rem', width: '20%'}} >Postar</Button>
+            <div>
+              <textarea value={postBody} placeholder={"Escreva um post..."} onChange={e => setPostBody(e.target.value)} />
+              <Button onClick={handleCreatePost} style={{padding: '0.25rem', width: '20%'}} >Postar</Button>
+
+            </div>
           </CreatePostInputContainer>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <PostContentContainer key={post.id} onClick={() => handleSelectPost(post.id)} style={{cursor: 'pointer'}}>
-                <UserInfo>
-                  <PostImg src={Perfil} alt="foto do usuário" />
-                  <div>
-                    <StyledP size={18} color="#f2f2f2" bold={600}>
-                      {post.username}
-                    </StyledP>
-                    <StyledP size={10} color="#B793FF" bold={600}>
-                      {" "}
-                      <Clock style={{marginLeft: '-0.05rem'}} /> em {
-                      new Intl.DateTimeFormat('pt-BR').format(new Date(post.createdAt))} as {new Date(post.createdAt).getHours()}:{new Date(post.createdAt).getMinutes() < 10 ? '0' : ''}{new Date(post.createdAt).getMinutes()} pm
-                    </StyledP>
-                    <StyledP size={14} color="#B793FF" bold={600}>
-                      Postou
-                    </StyledP>
-                  </div>
-                </UserInfo>
-
-
-                <PostContainer style={{overflowX: 'unset', height: "auto"}} >
-                  <p>{post.body}</p>
-                </PostContainer>
-
-                {/* <HighlightMusicContainer
-                  style={{ height: "7rem", width: "70%", margin: "0 auto" }}
-                >
-                  <img
-                    style={{ borderRadius: "1rem" }}
-                    src={post.album_url}
-                    alt="Capa do album do perfil"
-                  />
-                  <div>
-                    <p style={{ fontSize: "16px", fontWeight: 600 }}>
-                      {post.music}
-                    </p>
-                    <p>{post.album_artist}</p>
-                  </div>
-                  <div className="buttons">
-                    <img src={Spotify} alt="Spotifiy logo" />
-                    <img src={Album} alt="Album logo" />
-                  </div>
-                </HighlightMusicContainer> */}
-
-                <IconsContainer
-                  style={{
-                    height: "6rem",
-                    width: "65%",
-                    margin: " 0.5rem auto",
-                    alignItems: "flex-start"
-                  }}
-                >
-                  <div>
-                    <img onClick={(event) => handleLikePost(post.id, event)} src={Like} alt="Icone de curtir" />
-                    <p>{post.likeCount}</p>
-                  </div>
-                  <img src={New_Repost} alt="Icone do chat" />
-                  <div>
-                  <img src={Comment} alt="Icone do grafico" />
-                    <p>{post.commentCount}</p>
-                  </div>
-                  <img src={Share} alt="Icone das notificações" />
-                </IconsContainer>
-
-                {post.email === user?.email ?
-                <DetailContainer onClick={handleDetail}>
-                  <Arrow />
-                </DetailContainer> :  ''}
-              </PostContentContainer>
+              <PostContentContainer postData={post} refetchPosts={refetchPosts} height />
             ))
           ) : (
             <AnimationContainer>
@@ -406,7 +395,7 @@ export default function Feed() {
           style={expandNews ? { display: "none" } : { display: "flex" }}
           onClick={() => setExpandNews(!expandNews)}
         >
-          <Arrow />
+          <ArrowImage />
         </ExpandNewsContainer>
         <ContentNewsContainer>
           {news.length > 0 && <Title>Últimas Notícias</Title>}
@@ -429,17 +418,13 @@ export default function Feed() {
             ))
           ) : (
             <>
-              <Title>Nenhuma noticia :(</Title>
+              <Title style={{ marginTop: "5rem" }} >Nenhuma noticia :(</Title>
               <Player
                 autoplay
                 loop
                 src={NewsAnimation}
                 style={{ width: "150px" }}
               />
-
-              <HomeLink to="/feed" style={{ color: "#f2f2f2" }}>
-                Siga alguns artista para exibir suas noticias
-              </HomeLink>
             </>
           )}
         </ContentNewsContainer>

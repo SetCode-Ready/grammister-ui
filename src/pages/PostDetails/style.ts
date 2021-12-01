@@ -27,7 +27,7 @@ export const BottomLeftContainer = styled.div`
 
 export const WrapperContainer = styled.div`
   width: 80%;
-  height: 17rem;
+  height: 20rem;
   margin: 0 auto;
   overflow-x: auto;
 
@@ -36,7 +36,7 @@ export const WrapperContainer = styled.div`
         width: 0.5rem;
     }
     ::-webkit-scrollbar-thumb{
-        background: #5E19A2;
+        background: #F46036;
         border-radius: 1rem;
     }
 `
@@ -87,6 +87,7 @@ export const CommentsContainer = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    cursor: pointer;
 
     img{
       padding: 0.2rem;

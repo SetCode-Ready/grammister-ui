@@ -145,7 +145,7 @@ export default function Home() {
             />
 
             <ForgotContainer>
-              <ForgotLink to="/">Esqueceu sua senha?</ForgotLink>
+              <ForgotLink to="/forgot_password">Esqueceu sua senha?</ForgotLink>
             </ForgotContainer>
 
             <Button

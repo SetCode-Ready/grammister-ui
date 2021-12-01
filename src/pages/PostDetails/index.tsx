@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState } from "react";
 import {
   LeftContainer,
   MainContainer,
@@ -11,35 +11,24 @@ import {
 import Comment from "../../assets/COMMENT.png";
 import {
   CreatePostInputContainer,
-  DetailContainer,
-  HighlightMusicContainer,
   IconsContainer,
-  PostContainer,
-  PostContentContainer,
-  PostImg,
-  StyledP,
-  UserInfo,
 } from "../Feed/style";
-import Perfil from "../../assets/PERFIL.png";
-import Spotify from "../../assets/PLAYSPOTIFY.png";
-import Album from "../../assets/ALBUMVIEW.png";
-import Share from "../../assets/SHARE.png";
-import New_Repost from "../../assets/NEW POSTORREPOST.png";
-import Like from "../../assets/LIKE.png";
-import { ReactComponent as Clock } from "../../assets/CLOCK.svg";
-import { ReactComponent as Arrow } from "../../assets/Arrow.svg";
+import { ReactComponent as Trash } from "../../assets/T.svg";
 import Home from "../../assets/HOME.png";
 import Notification from "../../assets/NOTIFICATION.png";
 import Charts from "../../assets/CHARTS.png";
 import Chat from "../../assets/CHAT.png";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COMMENT, GET_POST_BY_ID, LIKE_POST } from "../../Graphql";
+import { CREATE_COMMENT, DELETE_COMMENT, GET_POST_BY_ID} from "../../Graphql";
 import { Button } from "../../components/Button/style";
 import toast from "react-hot-toast";
+import PostContentContainer from "../../components/PostContentContainer";
+import { AuthContext } from "../../context/Auth";
+import jwt_decode from 'jwt-decode';
 
 interface PostsProps {
-  id: Number;
+  id: number;
   user_photo_url: string;
   username: string;
   createdAt: any;
@@ -49,16 +38,26 @@ interface PostsProps {
   body: string;
   likeCount:number;
   commentCount: number;
+  email: string;
 }
 
 interface CommentsProps {
   id: number;
   body: string;
   username: string;
+  email: string;
 }
 
 interface ParamsProps {
   id: string;
+}
+
+interface UserProps {
+  name: string;
+  email: string;
+  id: string;
+  followers: string[];
+  following: string[];
 }
 
 export default function PostDetails() {
@@ -66,17 +65,27 @@ export default function PostDetails() {
 
   const { id } = useParams<ParamsProps>();
 
+  const {getTokenOnLocalStorage} = useContext(AuthContext)
+
+  const token = getTokenOnLocalStorage('token')
+
+  const [loggedUser, setLoggedUser] = useState<UserProps>()
+  
+  const [post, setPost] = useState<PostsProps>();
+  const [comments, setComments] = useState<CommentsProps[]>();
+  const [commentBody, setCommentBody] = useState("");
+  
   const { data, refetch } = useQuery(GET_POST_BY_ID, {
     variables: { postId: id },
   });
 
-  const [post, setPost] = useState<PostsProps>();
-  const [comments, setComments] = useState<CommentsProps[]>();
-  const [commentBody, setCommentBody] = useState("");
+  const [createComment] = useMutation(CREATE_COMMENT, {
+    errorPolicy: 'all'
+  });
 
-  const [createComment] = useMutation(CREATE_COMMENT);
-
-  let [like] = useMutation(LIKE_POST, {errorPolicy: 'all'})
+  const [deleteComment] = useMutation(DELETE_COMMENT, {
+    errorPolicy: 'all'
+  })
 
   async function handleCreateComment() {
     if (commentBody === "") {
@@ -95,14 +104,16 @@ export default function PostDetails() {
     setCommentBody("");
   }
 
-  async function handleLikePost(id: string){
-    await like({
-      variables: {
-        postId: id
-      }
-    })
+  async function handleDeleteComment(Commentid: number) {
 
-    refetch()
+    await deleteComment({
+      variables: {
+        postId: id,
+        commentId: Commentid,
+      },
+    }).then(() => toast.success("Comentário deletado"));
+
+    refetch();
   }
 
   useEffect(() => {
@@ -113,100 +124,21 @@ export default function PostDetails() {
     }
   }, [data, refetch]);
 
+  useEffect(() => {
+
+    if(!token){
+      history.push("/")
+      return
+    }
+
+    const user: UserProps = jwt_decode(token)
+    setLoggedUser(user)
+  }, [history, token])
+
   return (
     <MainContainer>
       <LeftContainer>
-        <PostContentContainer style={{ width: "100%", height: "100%" }}>
-          <UserInfo>
-            <PostImg src={Perfil} alt="foto do usuário" />
-            <div>
-              <StyledP size={18} color="#f2f2f2" bold={600}>
-                {post?.username}
-              </StyledP>
-              <StyledP size={10} color="#B793FF" bold={600}>
-                {" "}
-                <Clock style={{ marginLeft: "-0.05rem" }} /> em{" "}
-                {post?.createdAt &&
-                  new Intl.DateTimeFormat("pt-BR").format(
-                    new Date(post?.createdAt)
-                  )}{" "}
-                as {post?.createdAt && new Date(post?.createdAt).getHours()}:
-                {post?.createdAt && new Date(post?.createdAt).getMinutes() < 10
-                  ? "0"
-                  : ""}
-                {post?.createdAt && new Date(post?.createdAt).getMinutes()} pm
-              </StyledP>
-              <StyledP size={14} color="#B793FF" bold={600}>
-                postou
-              </StyledP>
-            </div>
-          </UserInfo>
-
-          <PostContainer style={{paddingRight: '0.5rem', height: "7rem"}} >
-            <p>{post?.body}</p>
-          </PostContainer>
-
-          {/* <HighlightMusicContainer
-                  style={{ height: "7rem", width: "70%", margin: "0 auto" }}
-                >
-                  <img
-                    style={{ borderRadius: "1rem" }}
-                    src={post?.album_url}
-                    alt="Capa do album do perfil"
-                  />
-                  <div>
-                    <p style={{ fontSize: "16px", fontWeight: 600 }}>
-                      {post?.music}
-                    </p>
-                    <p>{post?.album_artist}</p>
-                  </div>
-                  <div className="buttons">
-                    <img src={Spotify} alt="Spotifiy logo" />
-                    <img src={Album} alt="Album logo" />
-                  </div>
-                </HighlightMusicContainer> */}
-
-          <IconsContainer
-            style={{
-              height: "5rem",
-              width: "65%",
-              margin: "2rem auto 1rem auto",
-              alignItems: "flex-start"
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "4rem", height: "4rem" }}
-                src={Like}
-                alt="Icone de like"
-                onClick={() => handleLikePost(id)}
-              />
-              <p>{post?.likeCount}</p>
-            </div>
-            <img
-              style={{ width: "4rem", height: "4rem" }}
-              src={New_Repost}
-              alt="Icone do compartilhamento"
-            />
-            <div>
-              <img
-                style={{ width: "4rem", height: "4rem" }}
-                src={Comment}
-                alt="Icone de comenarios"
-                />
-              <p>{post?.commentCount}</p>
-            </div>
-            <img
-              style={{ width: "4rem", height: "4rem" }}
-              src={Share}
-              alt="Icone de compartilhamento"
-            />
-          </IconsContainer>
-
-          <DetailContainer>
-            <Arrow />
-          </DetailContainer>
-        </PostContentContainer>
+        { post && <PostContentContainer postData={post} refetchPosts={refetch} returnToFeed />}
       </LeftContainer>
       <RightContainer>
         <TopContainer>
@@ -217,32 +149,34 @@ export default function PostDetails() {
         <WrapperContainer>
           {comments?.map((comment) => (
             <CommentsContainer key={comment.id}>
-              {/* <img className="User" src={comment.photo_url} alt="foto do usuário" /> */}
               <div>
                 <h3>{comment.username}</h3>
                 <p>{comment.body}</p>
               </div>
-
-              <div className="ButtonContainer">
-                <img src={Like} alt="Icone de like" />
-                <img src={Share} alt="Icone de compartilhamento" />
-              </div>
+            
+              {loggedUser?.email === comment.email &&
+                <div className="ButtonContainer">
+                  <Trash onClick={() => handleDeleteComment(comment.id)}/>
+                </div>
+              }
             </CommentsContainer>
           ))}
         </WrapperContainer>
-          <CreatePostInputContainer>
-            <p>Comente</p>
-            <input
-              value={commentBody}
-              onChange={(e) => setCommentBody(e.target.value)}
-              type="text"
-            />
-            <Button
-              onClick={handleCreateComment}
-              style={{ padding: "0.25rem", width: "20%" }}
-            >
-              Postar
-            </Button>
+          <CreatePostInputContainer style={{padding: '0'}} >
+            <div>
+              <textarea
+                style={{minHeight: "0.5rem"}}
+                value={commentBody}
+                onChange={(e) => setCommentBody(e.target.value)}
+                placeholder={"Faça um comentário!"}
+              />
+              <Button
+                onClick={handleCreateComment}
+                style={{ padding: "0.25rem", width: "20%" }}
+              >
+                Postar
+              </Button>
+            </div>
           </CreatePostInputContainer>
       </RightContainer>
       <BottomLeftContainer>
