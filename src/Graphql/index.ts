@@ -27,8 +27,8 @@ export const GET_POST = gql`
 export const GET_POST_BY_ID = gql`
   query findPostById($postId: ID!){
     findPostById(postId: $postId){
-      likeCount commentCount email body createdAt username comments {
-        body id username
+      id likeCount commentCount email body createdAt username comments {
+        body id username email
       }
     }
   }
@@ -61,7 +61,7 @@ export const LIKE_POST = gql`
 export const FIND_USERS_BY_NAME = gql`
   query findUsersByName($userName: String!){
   findUsersByName(userName: $userName) {
-    id name followers email
+    id name followers email following
   }
 }
 `
@@ -69,7 +69,7 @@ export const FIND_USERS_BY_NAME = gql`
 export const FIND_USER_BY_ID = gql`
   query findUserById($userId: ID!){
   findUserById(userId: $userId) {
-    name followers email
+    name followers email following
   }
 }
 `
@@ -78,5 +78,18 @@ export const FOLLOW_USER = gql`
   mutation FollowUser($userId: ID!) {
     followUser(userId: $userId)
   }
+`
+export const DELETE_POST = gql`
+  mutation DeletePost($postId: ID!) {
+    deletePost(postId: $postId)
+  }
+`
+
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($postId: ID!, $commentId: ID!) {
+  deleteComment(postId: $postId, commentId: $commentId){
+    body
+  }
+}
 `
 
